@@ -91,6 +91,9 @@ namespace com.genteure.cqp.AntiAlipay
             [DllImport("CQP.DLL")]
             public static extern string CQ_getRecord(int AuthCode, string File, string Format);
 
+            [DllImport("CQP.DLL")]
+            public static extern int CQ_deleteMsg(int AuthCode, int messageId);
+
             // [DllImport("CQP.DLL")]
             // public static extern int CQ______________(int AuthCode, long someshit);
 

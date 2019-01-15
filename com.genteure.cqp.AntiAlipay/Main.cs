@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using ZXing;
 
 namespace com.genteure.cqp.AntiAlipay
@@ -44,7 +45,7 @@ namespace com.genteure.cqp.AntiAlipay
         }
 
         [DllExport("_eventGroupMsg", CallingConvention.StdCall)]
-        public static CoolQApi.Event ProcessGroupMessage(int subType, int sendTime, long fromGroup,
+        public static CoolQApi.Event ProcessGroupMessage(int subType, int messageId, long fromGroup,
             long fromQQ, string fromAnonymous, string msg, int font)
         {
             try
@@ -88,6 +89,11 @@ namespace com.genteure.cqp.AntiAlipay
                         CoolQApi.SendGroupMsg(fromGroup, "严格禁止支付宝类二维码小广告。第一次禁言，第二次自动踢出群。");
                         CoolQApi.SetGroupBan(fromGroup, fromQQ, 60 * 60 * 2); // 禁言 2 小时
                     }
+                    Task.Run(() =>
+                    {
+                        Task.Delay(3000).Wait();
+                        CoolQApi.DelectMsg(messageId);
+                    });
                 }
                 return CoolQApi.Event.Ignore;
             }

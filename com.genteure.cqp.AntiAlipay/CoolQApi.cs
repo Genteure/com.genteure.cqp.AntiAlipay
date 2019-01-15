@@ -279,6 +279,13 @@ namespace com.genteure.cqp.AntiAlipay
         /// <returns></returns>
         public static string GetRecord(string File, string Format) => NativeMethods.CQ_getRecord(ac, File, Format);
 
+        /// <summary>
+        /// 撤回消息
+        /// </summary>
+        /// <param name="MessageId">消息ID</param>
+        /// <returns></returns>
+        public static int DelectMsg(int MessageId) => NativeMethods.CQ_deleteMsg(ac, MessageId);
+
         #endregion
 
         /// <summary>
@@ -286,14 +293,14 @@ namespace com.genteure.cqp.AntiAlipay
         /// </summary>
         internal struct RecordFormat
         {
-            const string MP3 = "mp3";
-            const string AMR = "amr";
-            const string WMA = "wma";
-            const string M4A = "m4a";
-            const string SPX = "spx";
-            const string OGG = "ogg";
-            const string WAV = "wav";
-            const string FLAC = "flac";
+            private const string MP3 = "mp3";
+            private const string AMR = "amr";
+            private const string WMA = "wma";
+            private const string M4A = "m4a";
+            private const string SPX = "spx";
+            private const string OGG = "ogg";
+            private const string WAV = "wav";
+            private const string FLAC = "flac";
         }
 
         /// <summary>
@@ -381,7 +388,7 @@ namespace com.genteure.cqp.AntiAlipay
             public Unpack(byte[] source) => _source = source;
             public byte[] GetAll() => _source.SubArray(_location, _source.Length - _location);
             public int Len() => _source.Length - _location;
-            public byte[] GetBin(int len) { if (len <= 0) return null; _location += len; return _source.SubArray(_location, len); }
+            public byte[] GetBin(int len) { if (len <= 0) { return null; } _location += len; return _source.SubArray(_location, len); }
             public byte GetByte() { _location += 1; return (byte)_source.SubArray(_location, 1).GetValue(0); }
             public int GetInt() { _location += 4; return _source.SubArray(_location, 4).ToInt(); }
             public long GetLong() { _location += 8; return _source.SubArray(_location, 8).ToLong(); }
@@ -393,7 +400,10 @@ namespace com.genteure.cqp.AntiAlipay
         private static bool ConvertAnsiHexToGroupMemberInfo(byte[] source, ref GroupMemberInfo gm)
         {
             if (source == null || source.Length < 40)
+            {
                 return false;
+            }
+
             var u = new Unpack(source);
             gm.GroupId = u.GetLong();
             gm.Number = u.GetLong();
