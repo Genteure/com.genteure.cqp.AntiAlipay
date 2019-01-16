@@ -89,10 +89,10 @@ namespace com.genteure.cqp.AntiAlipay
                         CoolQApi.SendGroupMsg(fromGroup, "严格禁止支付宝类二维码小广告。第一次禁言，第二次自动踢出群。");
                         CoolQApi.SetGroupBan(fromGroup, fromQQ, 60 * 60 * 2); // 禁言 2 小时
                     }
-                    Task.Run(() =>
+                    Task.Run(async () =>
                     {
-                        Task.Delay(3000).Wait();
-                        CoolQApi.DelectMsg(messageId);
+                        await Task.Delay(3000);
+                        CoolQApi.DeleteMsg(messageId);
                     });
                 }
                 return CoolQApi.Event.Ignore;

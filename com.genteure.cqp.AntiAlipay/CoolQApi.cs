@@ -284,7 +284,7 @@ namespace com.genteure.cqp.AntiAlipay
         /// </summary>
         /// <param name="MessageId">消息ID</param>
         /// <returns></returns>
-        public static int DelectMsg(int MessageId) => NativeMethods.CQ_deleteMsg(ac, MessageId);
+        public static int DeleteMsg(int MessageId) => NativeMethods.CQ_deleteMsg(ac, MessageId);
 
         #endregion
 
